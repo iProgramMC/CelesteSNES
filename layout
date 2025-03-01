@@ -3,7 +3,10 @@ MEMORY
 	# WRAM
 	ZEROPAGE:	start=$000000, size=$000100;
 	STACK:		start=$000100, size=$000100;
-	BSS:		start=$000200, size=$001E00;
+	BSS:		start=$000200, size=$001DFF;
+	ONERTL:     start=$001FFF, size=$000001; # One "RTL" (return long) instruction
+	SRAM:       start=$006000, size=$002000;
+	OAMBUF:     start=$7E0000, size=$000240; # 512+32
 	
 	
 	# ROM
@@ -13,16 +16,38 @@ MEMORY
 	ROM1:	start=$818000, size=$8000, type=ro, fill=yes, fillval=$00;
 	ROM2:	start=$828000, size=$8000, type=ro, fill=yes, fillval=$00;
 	ROM3:	start=$838000, size=$8000, type=ro, fill=yes, fillval=$00;
+	ROM4:	start=$848000, size=$8000, type=ro, fill=yes, fillval=$00;
+	ROM5:	start=$858000, size=$8000, type=ro, fill=yes, fillval=$00;
+	ROM6:	start=$868000, size=$8000, type=ro, fill=yes, fillval=$00;
+	ROM7:	start=$878000, size=$8000, type=ro, fill=yes, fillval=$00;
 }
 
 SEGMENTS
 {
 	PRG_MAIN:	load = ROM0, type = ro, align = $100;
 	PRG_HEADER:	load = ROM0, type = ro, start = $80FFC0;
+	
 	PRG_BANK1:	load = ROM1, type = ro, align = $100;
+	PRG_TTLE:   load = ROM1, type = ro;
+	
 	PRG_BANK2:	load = ROM2, type = ro, align = $100;
 	PRG_BANK3:	load = ROM3, type = ro, align = $100;
+	PRG_BANK4:	load = ROM4, type = ro, align = $100;
+	PRG_BANK5:	load = ROM5, type = ro, align = $100;
+	PRG_BANK6:	load = ROM6, type = ro, align = $100;
+	PRG_BANK7:	load = ROM7, type = ro, align = $100;
 	
 	ZEROPAGE:	load = ZEROPAGE, type = zp;
-	BSS:		load = BSS,      type = rw;
+	BSS:		load = BSS,      type = bss;
+	ENTITIES:   load = BSS,      type = bss;
+	PLTRACES:   load = BSS,      type = bss;
+	MORERAM:    load = BSS,      type = bss;
+	LASTRAM:    load = BSS,      type = bss;
+	AREASPC:    load = BSS,      type = bss, align = $100;
+	AREAXTRA:   load = BSS,      type = bss;
+	ADVTRACE:   load = BSS,      type = bss;
+	BGFXRAM:    load = BSS,      type = bss;
+	SAVEFILE:   load = SRAM,     type = bss;
+	ONERTL:     load = ONERTL,   type = bss;
+	OAMBUF:     load = OAMBUF,   type = bss;
 }

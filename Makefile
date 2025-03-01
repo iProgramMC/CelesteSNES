@@ -12,7 +12,7 @@ DEBUGSW=-DDEBUG
 build: main.sfc
 
 %.o: src/%.asm
-	$(AS) -g --create-dep "$@.dep" --debug-info $< -o $@ --listing "$(notdir $@).lst" $(DEBUGSW)
+	$(AS) -g --create-dep "$@.dep" --debug-info $< -o $@ --listing "$(notdir $@).lst" $(DEBUGSW) -DSNES
 
 main.sfc: layout main.o
 	$(LD) --dbgfile $@.dbg -C $^ -o $@ -m $@.map
