@@ -11,6 +11,13 @@ either:
 
 **This project is based on https://github.com/iProgramMC/CelesteNES.**
 
+## Why now?
+
+I don't know. Just for fun I suppose.
+
+This project will loosely follow [CelesteNES](https://github.com/iProgramMC/CelesteNES). This means that
+CelesteNES will be updated more often.
+
 ## Discord Server
 
 If you would like to chat about this game, you can do so in our Discord server: https://discord.gg/JWSUpfCubz
