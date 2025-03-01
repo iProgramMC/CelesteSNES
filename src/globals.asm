@@ -15,9 +15,11 @@
 .segment "ZEROPAGE"
 
 .ifdef SNES
-.define SIZE_DIFF 2
+.define SIZE1_DIFF 2
+.define SIZE2_DIFF 3
 .else
-.define SIZE_DIFF 1
+.define SIZE1_DIFF 1
+.define SIZE2_DIFF 2
 .endif
 
 nmi_disable : .res 1 ; HARD NMI disable - used when resetting the game. Must be zero to run NMIs.
@@ -78,8 +80,8 @@ splgapaddr  : .res 2
 
 mmc3_shadow : .res 1
 currA000bank: .res 1 ; current bank index loaded at $A000-$BFFF.
-oam_wrhead  : .res SIZE_DIFF ; OAM buffer write head
-wr_str_temp : .res 2 ; address of current character of string
+oam_wrhead  : .res SIZE1_DIFF ; OAM buffer write head
+wr_str_temp : .res SIZE2_DIFF ; address of current character of string
 x_crd_temp  : .res 1 ; used by oam_putsprite and h_get_tile, MUST be x before y!
 y_crd_temp  : .res 1 ; used by oam_putsprite
 scroll_x    : .res 1

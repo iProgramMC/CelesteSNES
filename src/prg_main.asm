@@ -394,6 +394,34 @@ irq:
 	rtl
 .endproc
 
+; ** SUBROUTINE: ppu_wrstring
+; arguments:
+;   x - low 16 bits of address (XY is 16 bits)
+;   y - bank byte of address
+;   a - length of string
+; assumes:  - VMADDR was programmed to the PPU dest address
+;             writes can happen (in vblank or rendering disabled)
+;           - that the string does not straddle a page
+;             boundary (256 bytes)
+; desc:     copies a string from memory to the PPU, and puts an attr byte of 0 on them
+; clobbers: VMADDR, all regs
+; Must be called with JSL
+.proc ppu_wrstring
+	.i16
+	stx wr_str_temp       ; store the address into a temporary
+	sta wr_str_temp + 2   ; indirection slot
+	tyx                   ; A cannot be incremented with 1 instruction
+	ldy #$00
+ppu_wrsloop:              ; so use X for that purpose
+	lda [wr_str_temp], y  ; use that indirection we setup earlier
+	sta vmdatal
+	stz vmdatah
+	iny
+	dex
+	bne ppu_wrsloop       ; if X != 0 print another
+	rtl
+.endproc
+
 ; ** SUBROUTINE: fade_in
 ; desc: Fades in.
 ; Must be called with JSL
