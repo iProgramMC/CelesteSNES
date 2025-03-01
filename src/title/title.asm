@@ -6,7 +6,7 @@ gamemode_title_init_FAR:
 	ldx #.loword(title_chr)
 	ldy #$4000
 	lda #.bankbyte(title_chr)
-	jsl load_chr_page_4K
+	jsl load_chr_page_8K
 	
 	ldx #.loword(title_palette)
 	lda #.bankbyte(title_palette)
@@ -16,7 +16,15 @@ gamemode_title_init_FAR:
 	
 	lda #%00000010 ; address = $4000 >> 13 = $02
 	sta bg12nba
-	stz bgmode
+	
+	; BGMODE 1
+	lda #1
+	sta bgmode
+	
+	; scroll coordinates
+	lda #4
+	sta bg1vofs
+	stz bg1vofs
 	
 	; set address increment mode (increment after writing $2119)
 	lda #%10000000
@@ -44,6 +52,7 @@ gamemode_titletr:
 
 title_palette:
 	.word $0000
-	.word $7FFF
-	.word %0111111101011010
-	.word %0110110101100010
+	.word $7FFF             ; white
+	.word %0111111101011010 ; bright cyan ish
+	.word %0110110101100010 ; blue
+	.word %0001110011100111 ; grey
