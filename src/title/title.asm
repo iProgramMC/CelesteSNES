@@ -6,6 +6,13 @@
 print_logo:
 	i16
 	
+	lda #%10000000
+	sta vmain
+	
+	; for testing
+	lda #%00000011
+	sta bg1sc
+	
 	ldx #.loword(title_chr)
 	ldy #BACKGROUND_BANK_1
 	lda #.bankbyte(title_chr)
@@ -169,7 +176,7 @@ tl_gameswitch_nofade:
 	sta gamectrl
 	sta musictable
 	sta musictable+1
-	;TODOjsl gm_set_level
+	jsl gm_set_level_FAR
 	rtl
 
 tl_owldswitch:

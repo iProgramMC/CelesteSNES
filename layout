@@ -3,11 +3,9 @@ MEMORY
 	# WRAM
 	ZEROPAGE:	start=$000000, size=$000100;
 	STACK:		start=$000100, size=$000100;
-	BSS:		start=$000200, size=$001DFF;
-	ONERTL:     start=$001FFF, size=$000001; # One "RTL" (return long) instruction
+	BSS:		start=$000200, size=$001E00;
 	SRAM:       start=$006000, size=$002000;
 	OAMBUF:     start=$7E2000, size=$000240; # 512+32
-	
 	
 	# ROM
 	# note: the fast ROM area starts at $808000
@@ -29,13 +27,19 @@ SEGMENTS
 	PRG_HEADER:	load = ROM0, type = ro, start = $80FFC0;
 	
 	PRG_BANK1:	load = ROM1, type = ro, align = $100;
-	PRG_TTLE:   load = ROM1, type = ro;
+		PRG_TTLE:   load = ROM1, type = ro;
 	
 	PRG_BANK2:	load = ROM2, type = ro, align = $100;
+		PRG_LVL0A:  load = ROM2, type = ro, align = $100;
+	
 	PRG_BANK3:	load = ROM3, type = ro, align = $100;
+	
 	PRG_BANK4:	load = ROM4, type = ro, align = $100;
+	
 	PRG_BANK5:	load = ROM5, type = ro, align = $100;
+	
 	PRG_BANK6:	load = ROM6, type = ro, align = $100;
+	
 	PRG_BANK7:	load = ROM7, type = ro, align = $100;
 	
 	ZEROPAGE:	load = ZEROPAGE, type = zp;
@@ -48,7 +52,7 @@ SEGMENTS
 	AREAXTRA:   load = BSS,      type = bss;
 	ADVTRACE:   load = BSS,      type = bss;
 	BGFXRAM:    load = BSS,      type = bss;
+	DRAWTEMP:   load = BSS,      type = bss;
 	SAVEFILE:   load = SRAM,     type = bss;
-	ONERTL:     load = ONERTL,   type = bss;
 	OAMBUF:     load = OAMBUF,   type = bss;
 }

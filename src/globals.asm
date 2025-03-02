@@ -122,6 +122,10 @@ tl_timer    : .res 1 ; used for weather
 ; note: these may be used as extra temporaries for the Game mode too!
 pot_merged  : .res 10
 
+.ifdef SNES
+lvladdrbk   : .res 1    ; always zero, also RIGHT next to lvladdr, lvladdrhi
+.endif
+
 ; title
 tl_gametime := pot_merged + 0
 tl_cschctrl := pot_merged + 1
@@ -208,7 +212,8 @@ clearpalo   : .res 1 ; enqueued name table clear, ppu address low
 clearpahi   : .res 1 ; enqueued name table clear, ppu address high
 clearsizex  : .res 1 ; enqueued name table clear, size X
 clearsizey  : .res 1 ; enqueued name table clear, size Y
-setdataaddr : .res 2 ; enqueued name table set, data source.
+setdataaddr : .res SIZE2_DIFF ; enqueued name table set, data source.
+setdataaddrP: .res SIZE2_DIFF ; enqueued name table set, palette data source.
 roomnumber  : .res 1 ; incremented every time a room transition happens
 climbbutton : .res 1 ; the state of the CLIMB button. Any non zero value works.
 deathangle  : .res 1 ; death particles angle
@@ -320,6 +325,10 @@ rununimport : .res 1 ; set this to 0 to allow running of unimportant stuff such 
 tswitches   : .res 1 ; amount of touch switches that have not been touched (platforms activate when this hits 0)
 cassrhythm  : .res 1 ; used to control the solidity of cassette blocks
 
+.ifdef SNES
+nametablehalf : .res 1
+.endif
+
 zero_on_respawn_zp_end:
 
 .ifndef SNES
@@ -334,27 +343,38 @@ sprspace    : .res $100
 plr_trace_x : .res $40
 plr_trace_y : .res $40
 
-.ifndef SNES
-
 .segment "DRAWTEMP"
+
+.ifdef SNES
+tempcol     : .res $20
+tempcolP    : .res $20
+.else
 temprowtot  : .res $40
 tempcol     = temprowtot+$00  ; 32 bytes - temporary column to be flushed to the screen
 temppal     = temprowtot+$20  ; 8 bytes  - temp palette column to be flushed to the screen
 temppalH1   = temprowtot+$28  ; 8 bytes  - temporary row in nametable 0
 temppalH2   = temprowtot+$30  ; 8 bytes  - temporary row in nametable 1 (NOTE MUST BE NEXT TO temppalH1)
+.endif
+
 ; 8 bytes here
 temprow1    : .res $20  ; 32 bytes - temporary row in nametable 0
 temprow2    : .res $20  ; 32 bytes - temporary row in nametable 1 (NOTE MUST BE NEXT TO TEMPROW1)
 temprow3    : .res $20  ; 32 bytes - temporary row in nametable 1
 loadedpals  : .res $40  ; 64 bytes - temporary storage for loaded palettes during vertical transitions
 lastcolumn  : .res $20  ; 30 bytes - temporary storage for last column, used during decompression
+
+.ifdef SNES
+temprow1P   : .res $20  ; 32 bytes - palettes for temprow1
+temprow2P   : .res $20  ; 32 bytes - palettes for temprow2
+temprow3P   : .res $20  ; 32 bytes - palettes for temprow30
+
+.else
 ntattrdata  : .res $80  ; 128 bytes- loaded attribute data
 spritepals  : .res 9    ; 9 bytes  - loaded sprite palettes
 spritepalso : .res 9    ; 9 bytes  - previous frame's loaded sprite palettes
 sprpalcount : .res 1    ; 1 byte   - amount of palettes written
 sprpaltemp  : .res 1    ; 1 byte   - just a temporary variable
 palidxs     : .res pal_max; pal_max bytes - the indices of each loaded palette
-
 .endif
 
 .segment "MORERAM"
@@ -576,8 +596,6 @@ tl_snow_x   := stars_y
 bgcurroffs  := stars_x ; current column relative to the screen, for background rendering in Ch3
 
 .ifdef SNES
-.segment "ONERTL"
-.res 1
 
 .segment "OAMBUF"
 oam_table_lo:	.res $200

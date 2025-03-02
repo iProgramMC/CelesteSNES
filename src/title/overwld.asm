@@ -20,6 +20,8 @@ gamemode_overwd_init_FAR:
 	;sta ppu_mask     ; disable rendering
 	lda #inidisp_OFF
 	sta inidisp
+	lda #%10000000
+	sta vmain
 	
 	jsl vblank_wait
 	

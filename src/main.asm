@@ -9,6 +9,7 @@
 
 .include "defines.asm"
 .include "globals.asm"
+.include "d_macros.asm"
 
 .include "header.asm"
 .include "prg_main.asm"
@@ -22,7 +23,12 @@
 .segment "PRG_BANK4"
 .segment "PRG_BANK5"
 .segment "PRG_BANK6"
-
 .segment "PRG_BANK7"
 title_chr:
 	.incbin "chr/b_title.chr"
+lvl0_chr:
+	.incbin "chr/b_lvl0.chr"
+sprites_chr:
+	.incbin "chr/sp_player.chr"
+
+.include "level0/bank_0.asm"

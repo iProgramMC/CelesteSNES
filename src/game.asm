@@ -3,7 +3,7 @@
 .i8
 .a8
 
-;.include "g_level.asm"
+.include "g_level.asm"
 ;.include "e_draw.asm"
 ;.include "e_update.asm"
 ;.include "e_physic.asm"
@@ -22,7 +22,7 @@
 ;.include "g_util.asm"
 ;.include "g_palette.asm"
 ;.include "g_math.asm"
-;.include "xtraif.asm"
+.include "xtraif.asm"
 
 ; ** SUBROUTINE: gm_update_ptstimer
 gm_update_ptstimer:
@@ -35,7 +35,11 @@ gm_update_ptstimer:
 
 ; ** SUBROUTINE: gm_load_room_fully
 gm_load_room_fully:
-	;TODOjsr x_gener_mts_ents_r_fixed ; calls h_gener_ents_r and h_gener_mts_r
+	lda lvldatabank
+	pha
+	plb
+	
+	jsr x_gener_mts_ents_r_fixed ; calls h_gener_ents_r and h_gener_mts_r
 	
 	lda #tilesahead
 	clc
@@ -46,9 +50,9 @@ gm_load_room_fully:
 @writeLoop:
 	tya
 	pha
-	;TODOjsr h_gener_col_r
-	;TODOjsr h_flush_col_r_cond
-	;TODOjsr h_flush_pal_r_cond
+	jsr h_gener_col_r
+	jsr h_flush_col_r_cond
+	jsr h_flush_pal_r_cond
 	lda nmictrl
 	and #<~(nc_flushcol|nc_flshpalv|nc_flushrow|nc_flushpal)
 	sta nmictrl
@@ -70,6 +74,10 @@ gm_load_room_fully:
 @dontMarkBeginning:
 	cpy tmpRoomTran
 	bne @writeLoop
+	
+	pea $0000
+	plb
+	plb
 	rts
 
 ; ** SUBROUTINE: gamemode_init
@@ -78,6 +86,18 @@ gm_game_init:
 	stx animmode
 	ldx #inidisp_OFF
 	stx inidisp
+	
+	; configure the background and stuff
+	lda #1
+	sta bgmode
+	
+	lda #%00000011
+	sta bg1sc
+	
+	; testing
+	lda %01100110
+	sta bg12nba
+	
 	ldx #0
 	
 	lda gamectrl2
@@ -124,7 +144,7 @@ gm_game_init:
 	; also don't instantly turn on if we just arrived in here. Let the fade_in routine handle it
 	sta nmictrl
 	
-	;TODOjsr gm_update_bg_bank
+	jsr gm_update_bg_bank
 	
 	; pull the "have we just respawned here?" flag? if it's false, then fade in
 	pla

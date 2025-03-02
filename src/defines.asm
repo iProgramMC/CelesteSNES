@@ -9,9 +9,9 @@
 
 ; these are all **byte level** addresses
 NAMETABLE_A       = $0000
-NAMETABLE_B       = $2000
-NAMETABLE_C       = $4000
-NAMETABLE_D       = $6000
+NAMETABLE_B       = $0800
+NAMETABLE_C       = $1000
+NAMETABLE_D       = $1800
 BACKGROUND_BANK_1 = $4000
 BACKGROUND_BANK_2 = $6000
 SPRITE_BANK_1     = $8000
@@ -499,7 +499,14 @@ gc_ceil  = $01
 gc_left  = $02
 gc_right = $03
 
-.ifndef SNES
+.ifdef SNES
+
+; Level Bank Format
+metatiles     = $8000 ; address of metatile character data
+metatile_info = $8100 ; address of metatile information
+metatile_pal  = $8200 ; address of metatile palette
+
+.else
 
 ; Level Bank Format
 metatiles     = $C000 ; address of metatile character data

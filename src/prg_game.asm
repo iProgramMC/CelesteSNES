@@ -3,5 +3,5 @@
 .segment "PRG_GAME"
 
 .include "game.asm"
-;.include "lvltable.asm"
+.include "lvltable.asm"
 ;.include "dialogif.asm"
