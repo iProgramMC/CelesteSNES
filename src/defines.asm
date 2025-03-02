@@ -2,6 +2,11 @@
 
 .ifdef SNES
 
+; ****** SNES MEMORY MAP ******
+; Nametables A,B,C,D - $0000-$3FFF
+; Background Tiles   - $4000-$7FFF
+; Sprites            - $8000-$FFFF
+
 ; ****** SNES REGISTERS ******
 
 inidisp   = $2100 ; force blank, screen brightness
@@ -93,6 +98,9 @@ joy1h     = $4219
 .define dasl(n) $4305+n<<4 ; DMA byte counter
 .define dash(n) $4306+n<<4 ; DMA byte counter
 .define dasb(n) $4307+n<<4 ; indirect HDMA bank
+
+; ****** SNES REGISTER VALUES ******
+inidisp_OFF  = $8F
 
 ; ****** ADDRESSING MODE SWITCHES ******
 ; these macros change the address mode in both ca65

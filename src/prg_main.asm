@@ -54,14 +54,76 @@ ppu_nmi_on:
 	sta nmitimen
 	rtl
 
+; ** SUBROUTINE: com_clear_oam
+; desc: Clears OAM.
+; must call with JSL
+com_clear_oam:
+	ldx #0
+	txa
+:	sta f:oam_table_lo+$000, x
+	sta f:oam_table_lo+$100, x
+	inx
+	bne :-
+	
+:	sta f:oam_table_hi, x
+	inx
+	cpx #32
+	bne :-
+	
+	stz oam_wrhead
+	stz oam_wrhead+1
+	rtl
+
 ; ** SUBROUTINE: oam_putsprite
+; ** SUBROUTINE: oam_putsprite2
 ; arguments:
 ;   a - attributes
+;   x - extended attributes (sprite size, sign bit, applies only to oam_putsprite2)
 ;   y - tile number
 ;   [x_crd_temp] - y position of sprite
 ;   [y_crd_temp] - y position of sprite
 ; clobbers:  a, y
-; desc:      inserts a sprite into OAM memory
+; desc:      inserts a big sprite into OAM memory
+; must call with JSL
+oam_putsprite2:
+	cpx #0
+	beq oam_putsprite
+	
+	pha
+	a16
+	
+	lda oam_wrhead
+	
+	; since oam_wrhead is a byte position ($000-$1FF), we need to shift it a bunch
+	lsr
+	lsr
+	
+	; now it's the sprite index, but we need to mess with it some more
+	pha
+	
+	; first, get the in-byte position, multiply it by 4 and add the extended attribute bits
+	and #3
+	sta temp1
+	txa
+	asl
+	asl	
+	clc
+	adc temp1
+	tay
+	
+	pla
+	lsr
+	lsr
+	tax
+	a8
+	
+	; now, X is the byte to modify, and Y is the bit index to modify
+	lda f:oam_table_hi, x
+	ora oam_putsprite_table, y
+	sta f:oam_table_hi, x
+	
+	pla
+
 oam_putsprite:
 	i16
 	; 0 - X coord
@@ -71,14 +133,14 @@ oam_putsprite:
 	
 	; store the attribute and tile number byte
 	ldx oam_wrhead
-	sta oam_table_lo+3, x
+	sta f:oam_table_lo+3, x
 	tya
-	sta oam_table_lo+2, x
+	sta f:oam_table_lo+2, x
 	
 	lda x_crd_temp
-	sta oam_table_lo, x
+	sta f:oam_table_lo, x
 	lda y_crd_temp
-	sta oam_table_lo+1, x
+	sta f:oam_table_lo+1, x
 	
 	inx
 	inx
@@ -88,6 +150,12 @@ oam_putsprite:
 	
 	i8
 	rtl
+
+oam_putsprite_table:
+	.byte $00, $00, $00, $00
+	.byte $01, $04, $10, $40
+	.byte $02, $08, $20, $80
+	.byte $03, $0C, $30, $C0
 
 reset:
 	sei
@@ -161,30 +229,6 @@ reset:
 	; set up the color palette
 	stz cgadd
 	
-	; color format: 0bbbbbgggggrrrrr
-	
-	; black
-	stz cgdata
-	stz cgdata
-	
-	; dark gray
-	lda #%11100111
-	sta cgdata
-	lda #%00011100
-	sta cgdata
-
-	; med gray
-	lda #%11101111
-	sta cgdata
-	lda #%00111101
-	sta cgdata
-	
-	; white
-	lda #%11111111
-	sta cgdata
-	lda #%01111111
-	sta cgdata
-	
 	; set BG Mode to 1
 	lda #1
 	sta bgmode
@@ -247,27 +291,6 @@ reset:
 	
 	; second 64K
 	stx dasl(0)
-	sta mdmaen
-	
-	; perform DMA on channel 0 to transfer our char set into memory
-	; bbad and vmain remain the same
-	
-	lda #%00000001 ; pattern 1, transfer from A to B, increment A bus addr after copy
-	sta dmap(0)
-	
-	; we want to write the char set to $4000
-	ldx #$4000>>1
-	stx vmaddl
-	
-	ldx #.loword(charset)
-	stx a1tl(0) ; and a1th(0)
-	lda #<.hiword(charset)
-	sta a1b(0)
-	ldx #.loword(charset_end-charset)
-	stx dasl(0) ; and dash(0)
-	
-	; and go !
-	lda #1
 	sta mdmaen
 	
 	; show BG1 in main screen
@@ -445,6 +468,31 @@ ppu_wrsloop:              ; so use X for that purpose
 	bne @loop
 	
 	lda #$0F
+	sta inidisp
+	rtl
+.endproc
+
+; ** SUBROUTINE: fade_out
+; desc: Fades in.
+; Must be called with JSL
+.proc fade_out
+	a8
+	lda #31
+	sta transtimer
+@loop:
+	jsl soft_nmi_on
+	jsl nmi_wait
+	jsl soft_nmi_off
+	
+	; transtimer >> 1 determines the screen's brightness
+	lda transtimer
+	lsr
+	sta inidisp
+	
+	dec transtimer
+	bne @loop
+	
+	lda #inidisp_OFF
 	sta inidisp
 	rtl
 .endproc

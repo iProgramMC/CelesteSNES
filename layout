@@ -6,7 +6,7 @@ MEMORY
 	BSS:		start=$000200, size=$001DFF;
 	ONERTL:     start=$001FFF, size=$000001; # One "RTL" (return long) instruction
 	SRAM:       start=$006000, size=$002000;
-	OAMBUF:     start=$7E0000, size=$000240; # 512+32
+	OAMBUF:     start=$7E2000, size=$000240; # 512+32
 	
 	
 	# ROM

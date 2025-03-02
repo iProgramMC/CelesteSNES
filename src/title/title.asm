@@ -1,6 +1,9 @@
 ; Copyright (C) 2025 iProgramInCpp
 
-gamemode_title_init_FAR:
+; ** SUBROUTINE: print_logo
+; clobbers: a, x, y
+; assumes:  video output disabled
+print_logo:
 	i16
 	
 	ldx #.loword(title_chr)
@@ -81,26 +84,83 @@ gamemode_title_init_FAR:
 	jsl ppu_wrstring
 	
 	i8
+	rts
+	
+gamemode_title_init_FAR:
+	ai8
+	lda #$00
+	sta scroll_x     ; clear some fields
+	sta scroll_y
+	sta scroll_flags
+	sta camera_x
+	sta camera_y
+	sta camera_x_pg
+	sta camera_y_hi
+	sta tl_cschctrl
+	sta fadeupdrt+1
+	
+	lda #inidisp_OFF
+	sta inidisp
+	
+	jsr print_logo   ; print the logo and the "PRESS BUTTON" text
+	jsl tl_init_snow
+	
 	lda titlectrl
 	ora #ts_1stfr
 	sta titlectrl
 	
 	jsl fade_in
-	
+
 gamemode_title_update_FAR:
+	jsl tl_update_snow
+	jsl tl_render_snow
+	
+	lda #cont_start
+	bit p1_cont
+	beq tl_no_transition
+	lda #gm_titletra
+	sta gamemode
+	lda #8
+	sta tl_timer
+	lda #tm_gametra
+	sta tl_gametime
+tl_no_transition:
 	rtl
 
 gamemode_titletr:
+	jsr tl_update_snow
+	jsr tl_render_snow
+	
+	ldx tl_gametime
+	dex
+	beq tl_owldswitch
+	stx tl_gametime
 	rtl
 
-title_palette:
-	.word $0000
-	.word $7FFF             ; white
-	.word %0111111101011010 ; bright cyan ish
-	.word %0110110101100010 ; blue
-	.word %0001110011100111 ; grey
+tl_owldswitch:
+	lda #0
+	sta fadeupdrt+1
+	jsr fade_out
+	
+	;lda #gm_overwld
+	;sta gamemode
+	;lda #0
+	;sta owldctrl
+	;lda #inidisp_OFF
+	;sta inidisp         ; disable rendering
+	
+	jsr fade_in
+	rtl
 
 logo_pressstart:	.byte $70,$71,$72,$73,$74,$75,$76,$77,$78
 logo_iprogram:		.byte $60,$61,$62,$63,$64,$65,$66,$67,$68,$69,$6A,$6B,$6C,$6D,$6E
 logo_exok:			.byte $60,$61,$79,$7A,$00,$7B,$7C,$7D,$7E
 logo_version:		.byte $20,$21,$22,$23,$24,$25,$26
+
+title_palette:
+	.word $0000
+	.word $7FFF             ; white
+	.word %0111001100101100 ; bright cyan ish
+	.word %0110110110101100 ; blue
+	.word %0001100010000100 ; grey
+	.word %0111111101111001 ; slightly darker white

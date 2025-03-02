@@ -22,7 +22,7 @@ tl_adjusret:
 tl_init_snow:
 	ldy #$00           ; initialize Y coordinates
 tl_initloop1:
-	jsr rand
+	jsl rand
 	sta tl_snow_y, y
 	iny
 	cpy #$10
@@ -30,7 +30,7 @@ tl_initloop1:
 	
 	ldy #$00           ; initialize X coordinates
 tl_initloop2:
-	jsr rand
+	jsl rand
 	sta tl_snow_x, y
 	iny
 	cpy #$10

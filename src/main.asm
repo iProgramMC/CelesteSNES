@@ -16,11 +16,6 @@
 
 
 .segment "PRG_BANK1"
-
-charset:
-	.incbin "chr/test.chr"
-charset_end:
-
 .segment "PRG_BANK2"
 .segment "PRG_BANK3"
 .segment "PRG_BANK4"

@@ -124,7 +124,7 @@ rand_m1_to_p2:
 ; arguments: none
 ; clobbers: all registers
 game_update:
-	;jsl com_clear_oam    ; clear OAM
+	jsl com_clear_oam    ; clear OAM
 	jsl jump_engine      ; jump to the corresponding game mode
 	;jmp com_calc_camera  ; calculate the visual camera position
 	rtl
