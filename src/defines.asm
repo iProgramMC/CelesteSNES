@@ -7,6 +7,30 @@
 ; Background Tiles   - $4000-$7FFF
 ; Sprites            - $8000-$FFFF
 
+; these are all **byte level** addresses
+NAMETABLE_A       = $0000
+NAMETABLE_B       = $2000
+NAMETABLE_C       = $4000
+NAMETABLE_D       = $6000
+BACKGROUND_BANK_1 = $4000
+BACKGROUND_BANK_2 = $6000
+SPRITE_BANK_1     = $8000
+SPRITE_BANK_2     = $A000
+SPRITE_BANK_3     = $C000
+SPRITE_BANK_4     = $E000
+
+; and the **word level* address counterparts
+W_NAMETABLE_A       = (NAMETABLE_A >> 1)
+W_NAMETABLE_B       = (NAMETABLE_B >> 1)
+W_NAMETABLE_C       = (NAMETABLE_C >> 1)
+W_NAMETABLE_D       = (NAMETABLE_D >> 1)
+W_BACKGROUND_BANK_1 = (BACKGROUND_BANK_1 >> 1)
+W_BACKGROUND_BANK_2 = (BACKGROUND_BANK_2 >> 1)
+W_SPRITE_BANK_1     = (SPRITE_BANK_1 >> 1)
+W_SPRITE_BANK_2     = (SPRITE_BANK_2 >> 1)
+W_SPRITE_BANK_3     = (SPRITE_BANK_3 >> 1)
+W_SPRITE_BANK_4     = (SPRITE_BANK_4 >> 1)
+
 ; ****** SNES REGISTERS ******
 
 inidisp   = $2100 ; force blank, screen brightness
@@ -85,6 +109,8 @@ hdmaen    = $420c ; h-blank DMA enable
 memsel    = $420d ; memory access speed
 
 rdnmi     = $4210 ; NMI flag
+
+hvbjoy    = $4212 ; PPU status, auto joypad status
 
 joy1l     = $4218
 joy1h     = $4219

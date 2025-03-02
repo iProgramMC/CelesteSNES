@@ -3,22 +3,22 @@
 gamemodes_LO:
 	.byte 0;<gamemode_game
 	.byte <gamemode_title
-	.byte 0;<gamemode_titletr
-	.byte 0;<gamemode_overwd
+	.byte <gamemode_titletr
+	.byte <gamemode_overwd
 	.byte 0;<gamemode_prologue
 	
 gamemodes_HI:
 	.byte 0;>gamemode_game
 	.byte >gamemode_title
-	.byte 0;>gamemode_titletr
-	.byte 0;>gamemode_overwd
+	.byte >gamemode_titletr
+	.byte >gamemode_overwd
 	.byte 0;>gamemode_prologue
 
 gamemodes_BK:
 	.byte 0;.bankbyte(gamemode_game)
 	.byte .bankbyte(gamemode_title)
-	.byte 0;.bankbyte(gamemode_titletr)
-	.byte 0;.bankbyte(gamemode_overwd)
+	.byte .bankbyte(gamemode_titletr)
+	.byte .bankbyte(gamemode_overwd)
 	.byte 0;.bankbyte(gamemode_prologue)
 
 ; ** SUBROUTINE: jump_engine

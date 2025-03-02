@@ -45,6 +45,15 @@ nmi_wait:
 	beq :-
 	rtl
 
+; ** SUBROUTINE: vblank_wait
+; arguments: none
+; clobbers: A
+; call with JSL
+vblank_wait:
+:	bit hvbjoy
+	bpl :-
+	rtl
+
 ; ** SUBROUTINE: ppu_nmi_on
 ; arguments: none
 ; clobbers: A

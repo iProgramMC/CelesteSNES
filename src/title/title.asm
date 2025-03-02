@@ -128,8 +128,8 @@ tl_no_transition:
 	rtl
 
 gamemode_titletr:
-	jsr tl_update_snow
-	jsr tl_render_snow
+	jsl tl_update_snow
+	jsl tl_render_snow
 	
 	ldx tl_gametime
 	dex
@@ -140,16 +140,14 @@ gamemode_titletr:
 tl_owldswitch:
 	lda #0
 	sta fadeupdrt+1
-	jsr fade_out
+	jsl fade_out
 	
-	;lda #gm_overwld
-	;sta gamemode
-	;lda #0
-	;sta owldctrl
-	;lda #inidisp_OFF
-	;sta inidisp         ; disable rendering
-	
-	jsr fade_in
+	lda #gm_overwld
+	sta gamemode
+	lda #0
+	sta owldctrl
+	lda #inidisp_OFF
+	sta inidisp         ; disable rendering
 	rtl
 
 logo_pressstart:	.byte $70,$71,$72,$73,$74,$75,$76,$77,$78
@@ -158,9 +156,14 @@ logo_exok:			.byte $60,$61,$79,$7A,$00,$7B,$7C,$7D,$7E
 logo_version:		.byte $20,$21,$22,$23,$24,$25,$26
 
 title_palette:
-	.word $0000
-	.word $7FFF             ; white
-	.word %0111001100101100 ; bright cyan ish
-	.word %0110110110101100 ; blue
-	.word %0001100010000100 ; grey
-	.word %0111111101111001 ; slightly darker white
+	.word %0000000000000000 ; 0 - black
+	.word %0111111111111111 ; 1 - white
+	.word %0111001100101100 ; 2 - bright cyan ish
+	.word %0110110110101100 ; 3 - blue
+	.word %0001100010000100 ; 4 - grey
+	.word %0111111101111001 ; 5 - slightly darker white
+	.word %0111111111111111 ; 6 - another white, for the "press start" GUI
+
+alt_colors:
+	.word %0000001111111111 ; yellow
+	.word %0000001111100000 ; green
