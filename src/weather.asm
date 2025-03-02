@@ -92,7 +92,7 @@ tl_updatrespawn:         ; respawn this particle
 	sta tl_snow_y, y
 	jmp tl_updacontinue
 
-snow_sprites: .byte $90, $92
+snow_sprites: .byte $00, $01
 
 ; ** SUBROUTINE: tl_render_snow
 tl_render_snow:
@@ -108,7 +108,7 @@ tl_render_loop:
 	tay
 	lda snow_sprites, y
 	tay
-	lda #3
+	lda #%00110000
 	jsl oam_putsprite
 	pla
 	tay

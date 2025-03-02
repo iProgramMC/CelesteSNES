@@ -69,11 +69,9 @@ ppu_nmi_on:
 com_clear_oam:
 	ldx #0
 	txa
-:	sta f:oam_table_lo+$000, x
-	sta f:oam_table_lo+$100, x
-	inx
-	bne :-
 	
+	; clear the high table - oam_putsprite (+oam_putsprite2) depend on
+	; the high table being initted to zero
 :	sta f:oam_table_hi, x
 	inx
 	cpx #32
@@ -81,6 +79,20 @@ com_clear_oam:
 	
 	stz oam_wrhead
 	stz oam_wrhead+1
+	
+	; then also set the Y coordinate to a high amount
+	i16
+	lda #$F0
+	ldx #0
+:	sta f:oam_table_lo+1, x
+	inx
+	inx
+	inx
+	inx
+	cpx #512
+	bne :-
+	
+	i8
 	rtl
 
 ; ** SUBROUTINE: oam_putsprite

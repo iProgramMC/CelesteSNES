@@ -7,9 +7,14 @@ print_logo:
 	i16
 	
 	ldx #.loword(title_chr)
-	ldy #$4000
+	ldy #BACKGROUND_BANK_1
 	lda #.bankbyte(title_chr)
 	jsl load_chr_page_8K
+	
+	ldx #.loword(snow_sprites_small)
+	lda #.bankbyte(snow_sprites_small)
+	ldy #SPRITE_BANK_1
+	jsl load_chr_page_4K
 	
 	ldx #.loword(title_palette)
 	lda #.bankbyte(title_palette)
@@ -19,6 +24,9 @@ print_logo:
 	
 	lda #%00000010 ; address = $4000 >> 13 = $02
 	sta bg12nba
+	
+	lda #%00000010 ; address = $8000 >> 14 = $02, object size 8x8 and 16x16
+	sta obsel
 	
 	; BGMODE 1
 	lda #1
@@ -105,6 +113,10 @@ gamemode_title_init_FAR:
 	jsr print_logo   ; print the logo and the "PRESS BUTTON" text
 	jsl tl_init_snow
 	
+	; show sprites
+	lda #%00010001
+	sta tm
+	
 	lda titlectrl
 	ora #ts_1stfr
 	sta titlectrl
@@ -163,7 +175,19 @@ title_palette:
 	.word %0001100010000100 ; 4 - grey
 	.word %0111111101111001 ; 5 - slightly darker white
 	.word %0111111111111111 ; 6 - another white, for the "press start" GUI
+	
+	; pad for 128 entries (256 bytes)
+title_palette_bg_end:
+	.res  256 - (title_palette_bg_end - title_palette)
+
+	; sprite palette data
+	.word $7FFF
+	.word $7FFF
+	
 
 alt_colors:
 	.word %0000001111111111 ; yellow
 	.word %0000001111100000 ; green
+
+snow_sprites_small:
+	.incbin "chr/sp_snow.chr"
