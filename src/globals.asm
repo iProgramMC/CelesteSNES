@@ -393,6 +393,16 @@ levelnumber : .res 1 ; level number
 sstrawberries: .res 4 ; 32 bit bitset of strawberries collected before the current session.
 
 ; Loaded sprite banks
+
+.ifdef SNES
+
+bg_bk1_addr : .res 3
+bg_bk2_addr : .res 3
+sp_bk1_addr : .res 3
+sp_bk2_addr : .res 3
+
+.else
+
 spr0_bknum  : .res 1
 spr1_bknum  : .res 1
 spr2_bknum  : .res 1
@@ -406,6 +416,8 @@ spr2_bkspl  : .res 1
 spr3_bkspl  : .res 1
 bg0_bkspl   : .res 1
 bg1_bkspl   : .res 1
+
+.endif
 
 lvlbasebank : .res 1 ; base bank from which alt banks are offset
 

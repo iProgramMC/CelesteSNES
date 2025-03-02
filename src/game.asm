@@ -22,6 +22,7 @@
 ;.include "g_util.asm"
 ;.include "g_palette.asm"
 ;.include "g_math.asm"
+.include "g_snesgfx.asm"
 .include "xtraif.asm"
 
 ; ** SUBROUTINE: gm_update_ptstimer
@@ -95,7 +96,7 @@ gm_game_init:
 	sta bg1sc
 	
 	; testing
-	lda %01100110
+	lda #%00100010
 	sta bg12nba
 	
 	ldx #0

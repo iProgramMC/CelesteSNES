@@ -61,22 +61,32 @@ level_berry_counts:
 	.byte 47
 	.byte 5
 
-level_bg_banks_1:
-	.byte 0;.byte chrb_lvl0
-	.byte 0;.byte chrb_lvl1
-	.byte 0;.byte chrb_lvl2
-	.byte 0;.byte chrb_lvl3
-	;.byte chrb_lvl0
-	;.byte chrb_lvl0
-	;.byte chrb_lvl0
-	;.byte chrb_lvl0
+level_bg_data_lo:
+	.byte <lvl0_chr
+	.byte <lvl0_chr
+	.byte <lvl0_chr
+	.byte <lvl0_chr
+	.byte <lvl0_chr
+	.byte <lvl0_chr
+	.byte <lvl0_chr
+	.byte <lvl0_chr
 
-level_bg_banks_2:
-	.byte 0;.byte chrb_lvl0+2
-	.byte 0;.byte chrb_lvl1+2
-	.byte 0;.byte chrb_lvl2+2
-	.byte 0;.byte chrb_lvl3+2
-	;.byte chrb_lvl0+2
-	;.byte chrb_lvl0+2
-	;.byte chrb_lvl0+2
-	;.byte chrb_lvl0+2
+level_bg_data_hi:
+	.byte >lvl0_chr
+	.byte >lvl0_chr
+	.byte >lvl0_chr
+	.byte >lvl0_chr
+	.byte >lvl0_chr
+	.byte >lvl0_chr
+	.byte >lvl0_chr
+	.byte >lvl0_chr
+
+level_bg_data_bk:
+	.byte ^lvl0_chr
+	.byte ^lvl0_chr
+	.byte ^lvl0_chr
+	.byte ^lvl0_chr
+	.byte ^lvl0_chr
+	.byte ^lvl0_chr
+	.byte ^lvl0_chr
+	.byte ^lvl0_chr

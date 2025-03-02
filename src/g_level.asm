@@ -1663,6 +1663,8 @@ gm_on_level_init:
 	lda startpy
 	sta player_y
 	
+	jsr gm_load_level_graphics
+	
 	; select the music bank
 	;lda #mmc3bk_prg1
 	;ldy musicbank
@@ -1716,9 +1718,9 @@ gm_set_level:
 	;lda #mmc3bk_prg0
 	;jsr mmc3_set_bank
 	
-	ldy level_banks_spr, x
-	sty defsprbank
-	sty spr1_bknum
+	;ldy level_banks_spr, x
+	;sty defsprbank
+	;sty spr1_bknum
 	
 	; TODO: Copy Graphics
 	
@@ -1797,11 +1799,18 @@ gm_set_level:
 	; load the "environment type" field. This specifies the default bank
 	lda (lvlptrlo), y
 	tay
-	lda level_bg_banks_1, y
-	sta bg0_bknum
+	
+	lda .bankbyte(level_bg_data_lo)
+	pha
+	plb
+	
+	lda level_bg_data_lo, y
+	sta bg_bk1_addr
+	lda level_bg_data_hi, y
+	sta bg_bk1_addr+1
+	lda level_bg_data_bk, y
+	sta bg_bk1_addr+2
 	sta lvlbasebank
-	lda level_bg_banks_2, y
-	sta bg1_bknum
 	
 	ldy #0
 	jsr gm_set_room
