@@ -4,14 +4,14 @@
 .proc nmi
 	inc nmicount
 	bit rdnmi
-	ai8
+	ai16
 	pha
-	
-	lda nmi_disable
-	bne dontRunNmi
-	
 	phx
 	phy
+	
+	ai8
+	lda nmi_disable
+	bne dontRunNmi
 	
 	lda nmienable
 	beq onlyAudioPlease  ; if NMIs are softly disabled, then ONLY run audio
@@ -38,10 +38,13 @@ onlyAudioPlease:
 	;jsr aud_run
 	
 dontRunAudio:
+	ai16
 	ply
 	plx
 dontRunNmi:
 	pla
+	.a8
+	.i8
 	rti
 .endproc
 

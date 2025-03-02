@@ -25,6 +25,7 @@ MEMORY
 SEGMENTS
 {
 	PRG_MAIN:	load = ROM0, type = ro, align = $100;
+	PRG_GAME:   load = ROM0, type = ro;
 	PRG_HEADER:	load = ROM0, type = ro, start = $80FFC0;
 	
 	PRG_BANK1:	load = ROM1, type = ro, align = $100;

@@ -12,6 +12,7 @@
 
 .include "header.asm"
 .include "prg_main.asm"
+.include "prg_game.asm"
 .include "prg_ttle.asm"
 
 

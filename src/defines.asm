@@ -499,6 +499,8 @@ gc_ceil  = $01
 gc_left  = $02
 gc_right = $03
 
+.ifndef SNES
+
 ; Level Bank Format
 metatiles     = $C000 ; address of metatile character data
 metatile_info = $C100 ; address of metatile information
@@ -614,6 +616,8 @@ prgb_dial   = $3C
 prgb_ttle   = $3D
 prgb_game   = $3E   ; bank containing game engine code.  This is fixed at $8000
 prgb_main   = $3F   ; bank containing main code.  This is fixed at $E000
+
+.endif
 
 ; NMI Control
 nc_turnon   = $01   ; turn on screen (set ppumask to default)

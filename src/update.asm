@@ -1,21 +1,21 @@
 ; Copyright (C) 2025 iProgramInCpp
 
 gamemodes_LO:
-	.byte 0;<gamemode_game
+	.byte <gamemode_game
 	.byte <gamemode_title
 	.byte <gamemode_titletr
 	.byte <gamemode_overwd
 	.byte 0;<gamemode_prologue
 	
 gamemodes_HI:
-	.byte 0;>gamemode_game
+	.byte >gamemode_game
 	.byte >gamemode_title
 	.byte >gamemode_titletr
 	.byte >gamemode_overwd
 	.byte 0;>gamemode_prologue
 
 gamemodes_BK:
-	.byte 0;.bankbyte(gamemode_game)
+	.byte .bankbyte(gamemode_game)
 	.byte .bankbyte(gamemode_title)
 	.byte .bankbyte(gamemode_titletr)
 	.byte .bankbyte(gamemode_overwd)

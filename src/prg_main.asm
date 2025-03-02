@@ -184,7 +184,8 @@ reset:
 	clc
 	xce
 	
-	ldx #$FF
+	i16
+	ldx #$1FF
 	txs
 	
 	pea $0000
@@ -464,6 +465,7 @@ ppu_wrsloop:              ; so use X for that purpose
 	dex
 	bne ppu_wrsloop       ; if X != 0 print another
 	rtl
+	.i8
 .endproc
 
 ; ** SUBROUTINE: fade_in

@@ -149,18 +149,49 @@ gamemode_titletr:
 	stx tl_gametime
 	rtl
 
+tl_gameswitchpcard:
+	; We will want to show the postcard.
+	; Since the bank with the postcard code is already loaded, indeed we can
+	; just call it.
+	stx levelnumber
+	
+	;TODOjsl fade_out
+	
+	;TODOjsl postcard
+	
+	; Fall through to tl_gameswitch
+	ldx levelnumber
+
+tl_gameswitch_nofade:
+	lda #gm_game
+	sta gamemode
+	lda #0
+	sta gamectrl
+	sta musictable
+	sta musictable+1
+	;TODOjsl gm_set_level
+	rtl
+
 tl_owldswitch:
+	;lda #0
+	;sta fadeupdrt+1
+	;jsl fade_out
+	;
+	;lda #gm_overwld
+	;sta gamemode
+	;lda #0
+	;sta owldctrl
+	;lda #inidisp_OFF
+	;sta inidisp         ; disable rendering
+	;rtl
+
+tl_gameswitch:
+	stx levelnumber
 	lda #0
 	sta fadeupdrt+1
 	jsl fade_out
-	
-	lda #gm_overwld
-	sta gamemode
-	lda #0
-	sta owldctrl
-	lda #inidisp_OFF
-	sta inidisp         ; disable rendering
-	rtl
+	ldx levelnumber
+	jmp tl_gameswitch_nofade
 
 logo_pressstart:	.byte $70,$71,$72,$73,$74,$75,$76,$77,$78
 logo_iprogram:		.byte $60,$61,$62,$63,$64,$65,$66,$67,$68,$69,$6A,$6B,$6C,$6D,$6E
